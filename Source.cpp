@@ -9,7 +9,7 @@ int main()
 	{
 		LOG("Start Game");
 
-	} while (isGameOver);
+	} while (isGameOver == false);
 
 	LOG("Game Over");
 }
