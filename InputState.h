@@ -12,6 +12,7 @@ enum class DirectionKeys : unsigned int
 
 class InputState
 {
+	friend class InputManager;
 public:
 	InputState();
 	~InputState();
