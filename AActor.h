@@ -3,6 +3,7 @@
 
 class AActor
 {
+public:
 	AActor(FVector2 InLocation, char InIcon);
 	AActor(const AActor& InAActor);
 	virtual ~AActor();
