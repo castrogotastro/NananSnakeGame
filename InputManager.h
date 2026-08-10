@@ -19,6 +19,6 @@ public:
 private:
 	InputState mInputState;
 	int displayRefreshSpeed = 200;
-	char mLastKeyPressed;
+	char mLastKeyPressed = ' ';
 	static bool mIsKeyDown;
 };
