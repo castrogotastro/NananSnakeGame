@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="AActor.cpp" />
     <ClCompile Include="FVector2.cpp" />
+    <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -134,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="AActor.h" />
     <ClInclude Include="FVector2.h" />
+    <ClInclude Include="GameBoard.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InputState.h" />
     <ClInclude Include="Utilities.h" />
