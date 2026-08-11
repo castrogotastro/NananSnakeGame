@@ -8,7 +8,7 @@ public:
 	AActor(const AActor& InAActor);
 	virtual ~AActor();
 
-protected:
+private:
 	FVector2 mLocation;
 	char mIcon;
 
