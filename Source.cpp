@@ -5,6 +5,7 @@
 
 int main()
 {
+	int testPush = 1;
 	bool isGameOver = false;
 	InputManager inputManager;
 	GameBoard gameBoard(30,20);
