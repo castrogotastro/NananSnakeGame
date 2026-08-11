@@ -2,6 +2,7 @@
 #include "AActor.h"
 #include "GameBoard.h"
 #include "InputManager.h"
+#include "Snake.h"
 
 int main()
 {
@@ -10,11 +11,14 @@ int main()
 	InputManager inputManager;
 	GameBoard gameBoard(30,20);
 
-	AActor player(FVector2(5, 5), 'P');
+
+
+	Snake player(FVector2(5, 22), 'P', '*', gameBoard);
+	
 	LOG_LN("Start Game");
 
 	bool isGameWon = false;
-	FVector2 winCondition(gameBoard.mWidth / 2, gameBoard.mHeight);
+	FVector2 winCondition(5, gameBoard.GetHeight());
 
 	do
 	{
@@ -22,18 +26,22 @@ int main()
 		inputManager.MoveCharacterSingleSpace(player);
 		system("cls");
 
-		for (int y = 0; y <= gameBoard.mHeight; ++y)
+		for (int y = 0; y <= gameBoard.GetHeight(); ++y)
 		{
-			for (int x = 0; x <= gameBoard.mWidth; ++x)
+			for (int x = 0; x <= gameBoard.GetWidth(); ++x)
 			{
-				if (x == 0 || x == gameBoard.mWidth || y == 0 || y == gameBoard.mHeight)
+				if (x == 0 || x == gameBoard.GetWidth() || y == 0 || y == gameBoard.GetHeight())
 				{
 					if (x == winCondition.mX && y == winCondition.mY)
 					{
 						LOG(" ");
 					}
-					LOG(gameBoard.mIconWall);
-					if (x == gameBoard.mWidth)
+					else
+					{
+						LOG(gameBoard.GetWallIcon());
+					}
+
+					if (x == gameBoard.GetWidth())
 					{
 						std::cout << std::endl;
 					}
@@ -50,9 +58,9 @@ int main()
 				
 				//Loose condition
 				if ((player.GetLocation().mX == 0
-					|| player.GetLocation().mX == gameBoard.mWidth
+					|| player.GetLocation().mX == gameBoard.GetWidth()
 					|| player.GetLocation().mY == 0
-					|| player.GetLocation().mY == gameBoard.mHeight) 
+					|| player.GetLocation().mY == gameBoard.GetHeight()) 
 					&& player.GetLocation().mX != winCondition.mX
 					&& player.GetLocation().mY != winCondition.mY)
 				{
