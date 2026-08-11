@@ -2,13 +2,14 @@
 #include "GameBoard.h"
 #include "Utilities.h"
 #include "Snake.h"
+#include "Collectible.h"
 
 Renderer::Renderer(const std::shared_ptr<Snake>& InPlayer, const std::shared_ptr<GameBoard>& InGameBoard)
 	: mPlayerWeak(InPlayer), mGameboardWeak(InGameBoard)
 {
 }
 
-void Renderer::RenderGame()
+void Renderer::RenderGame(std::vector <std::shared_ptr<Collectible>>& InCollectibles)
 {
 	system("cls");
 
@@ -39,6 +40,14 @@ void Renderer::RenderGame()
 						continue;
 					}
 				}
+
+				hasAActorRender = DrawCollectible(x, y, InCollectibles);
+				if (hasAActorRender == true)
+				{
+					continue;
+				}
+
+				
 
 				if (hasAActorRender == false)
 				{
@@ -110,4 +119,25 @@ bool Renderer::DrawPlayer(int InX, int InY, const std::shared_ptr<Snake>& InPlay
 		}
 	}
 	return false;
+}
+
+bool Renderer::DrawCollectible(int InX, int InY, std::vector<std::shared_ptr<Collectible>>& InCollectibles)
+{
+	for (int i = 0; i < InCollectibles.size(); i++)
+	{
+		if (!InCollectibles[i])
+		{
+			return false;
+		}
+
+		if (InX == InCollectibles[i]->GetLocation().mX
+			&& InY == InCollectibles[i]->GetLocation().mY
+			&& InCollectibles[i]->GetHasBeenCollected() == false)
+		{
+			LOG(InCollectibles[i]->GetIcon());
+			return true;
+		}
+		return false;
+
+	}
 }
