@@ -5,6 +5,7 @@
 #include "Snake.h"
 #include <memory>
 #include "Renderer.h"
+#include "Collectible.h"
 
 int main()
 {
@@ -14,6 +15,15 @@ int main()
 	std::shared_ptr<GameBoard> gameBoard = std::make_shared<GameBoard>(30,20);
 
 	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *gameBoard);
+
+	int numCollectiblesToStart = 1;
+
+	std::vector <std::shared_ptr<Collectible>> collectiblesOnBoard;
+
+	for (int i = 0; i < numCollectiblesToStart; i++)
+	{
+		collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(FVector2(2, 2), '@'));
+	}
 
 	Renderer renderer(player, gameBoard);
 	
@@ -31,7 +41,7 @@ int main()
 		inputManager.Update();
 		inputManager.MoveCharacterSingleSpace(*player);
 
-		renderer.RenderGame();
+		renderer.RenderGame(collectiblesOnBoard);
 
 #if 0
 		system("cls");
