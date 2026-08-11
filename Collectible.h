@@ -6,6 +6,8 @@ public:
 	Collectible() = delete;
 	Collectible(FVector2 InLocation, char InIcon='@');
 
+	Collectible(const Collectible& InCollectibleRightOperand);
+
 private:
 	bool mHasBeenCollected = false;
 
