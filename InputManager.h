@@ -3,6 +3,7 @@
 #include "InputState.h"
 
 class AActor;
+class FVector2;
 
 class InputManager
 {
@@ -15,6 +16,7 @@ public:
 	const InputState& GetInputState();
 	void MoveCharacterContinuous(AActor& InActorToMove);
 	void MoveCharacterSingleSpace(AActor& InActorToMove);
+	void MoveCharacterAdditional(AActor& InActorToMove, FVector2& InOldHeadLocation);
 
 private:
 	InputState mInputState;

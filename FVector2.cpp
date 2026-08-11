@@ -1,5 +1,10 @@
 #include "FVector2.h"
 
+FVector2::FVector2()
+	: mX(0), mY(0)
+{
+}
+
 FVector2::FVector2(int InX, int InY) :
 	mX(InX), mY(InY)
 {

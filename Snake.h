@@ -14,6 +14,13 @@ private:
 	char mTailIcon;
 
 public:
+	char GetIconTail();
 	std::vector<FVector2> mTailLocations;
+
+	void AddToTail();
+
+	int GetTailLength();
+
+	void MoveTail(FVector2& InOldHeadLocation);
 };
 
