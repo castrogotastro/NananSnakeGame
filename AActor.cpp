@@ -14,7 +14,7 @@ AActor::~AActor()
 {
 }
 
-FVector2 AActor::GetLocation()
+FVector2 AActor::GetLocation() const
 {
     return mLocation;
 }
@@ -34,7 +34,7 @@ void AActor::SetLocationY(int InY)
     mLocation.mY = InY;
 }
 
-char AActor::GetIcon()
+char AActor::GetIcon() const
 {
     return mIcon;
 }
