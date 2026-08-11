@@ -130,6 +130,7 @@
     <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputState.cpp" />
+    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +139,7 @@
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InputState.h" />
+    <ClInclude Include="Snake.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
