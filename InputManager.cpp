@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include "AActor.h"
+#include "Snake.h"
 
 
 bool InputManager::mIsKeyDown = false;
@@ -87,10 +88,16 @@ void InputManager::MoveCharacterContinuous(AActor& InActorToMove)
     {
         InActorToMove.Move(1, 0);
     }
+
+    if (headPostion != InActorToMove.GetLocation())
+    {
+        MoveCharacterAdditional(InActorToMove, headPostion);
+    }
 }
 
 void InputManager::MoveCharacterSingleSpace(AActor& InActorToMove)
 {
+    FVector2 headPostion = InActorToMove.GetLocation();
     if (mInputState.isUp() && mIsKeyDown == true)
     {
         InActorToMove.Move(0, -1);
@@ -106,5 +113,18 @@ void InputManager::MoveCharacterSingleSpace(AActor& InActorToMove)
     else  if (mInputState.isRight() && mIsKeyDown == true)
     {
         InActorToMove.Move(1, 0);
+    }
+    
+    if (headPostion != InActorToMove.GetLocation())
+    {
+        MoveCharacterAdditional(InActorToMove, headPostion);
+    }
+}
+
+void InputManager::MoveCharacterAdditional(AActor& InActorToMove, FVector2& InOldHeadLocation)
+{
+    if (Snake* snake = dynamic_cast<Snake*>(&InActorToMove))
+    {
+        snake->MoveTail(InOldHeadLocation);
     }
 }

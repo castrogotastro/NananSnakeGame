@@ -100,5 +100,14 @@ bool Renderer::DrawPlayer(int InX, int InY, const std::shared_ptr<Snake>& InPlay
 		LOG(InPlayerShared->GetIcon());
 		return true;
 	}
+
+	for (FVector2& tailLocation : InPlayerShared->mTailLocations)
+	{
+		if (InX == tailLocation.mX && InY == tailLocation.mY)
+		{
+			LOG(InPlayerShared->GetIconTail());
+			return true;
+		}
+	}
 	return false;
 }
