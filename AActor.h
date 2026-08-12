@@ -13,12 +13,12 @@ private:
 	char mIcon;
 
 public:
-	FVector2 GetLocation();
+	FVector2 GetLocation() const;
 	void SetLocation(FVector2 InLocation);
 	void SetLocationX(int InX);
 	void SetLocationY(int InY);
 
-	char GetIcon();
+	char GetIcon() const;
 
 	void Move(int InChangeX, int InChangeY);
 	

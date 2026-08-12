@@ -5,6 +5,8 @@
 #include "Snake.h"
 #include <memory>
 #include "Renderer.h"
+#include "Collectible.h"
+#include "RandomNumGenerator.h"
 
 int main()
 {
@@ -15,12 +17,27 @@ int main()
 
 	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *gameBoard);
 
+	int numCollectiblesToStart = 4;
+
+	std::vector <std::shared_ptr<Collectible>> collectiblesOnBoard;
+
+	for (int i = 0; i < numCollectiblesToStart; i++)
+	{
+		FVector2 collectibleLocation;
+		collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
+		collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
+
+		collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation, '@'));
+	}
+
 	Renderer renderer(player, gameBoard);
 	
 	LOG_LN("Start Game");
 
 	bool isGameWon = false;
 	FVector2 winCondition(5, gameBoard->GetHeight());
+
+	bool isEasyMode = true;
 
 	do
 	{
@@ -31,7 +48,58 @@ int main()
 		inputManager.Update();
 		inputManager.MoveCharacterSingleSpace(*player);
 
-		renderer.RenderGame();
+		renderer.RenderGame(collectiblesOnBoard);
+
+
+		//check if player is overlapping with collectible
+		for (const std::shared_ptr<Collectible>& collectible : collectiblesOnBoard)
+		{
+			if (player->GetLocation() == collectible->GetLocation())
+			{
+				collectible->SetHasBeenCollected(true);
+			}
+		}
+
+		bool isOverlap = false;
+		for (std::vector<std::shared_ptr<Collectible>>::iterator iterator = collectiblesOnBoard.begin(); 
+			iterator != collectiblesOnBoard.end(); )
+		{
+			if ((*iterator)->GetHasBeenCollected() == true)
+			{
+				(*iterator).reset();
+
+				FVector2 collectibleLocation;
+				collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
+				collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
+				
+				(*iterator) = std::make_shared<Collectible>(collectibleLocation);
+				player->AddToTail();
+
+				
+			}
+			else
+			{
+				++iterator;
+			}
+		}
+
+		if (isEasyMode == true)
+		{
+
+			for (int numCollectibles = collectiblesOnBoard.size(); numCollectibles < player->GetTailLength(); ++numCollectibles)
+			{
+				FVector2 collectibleLocation;
+				collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
+				collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
+
+				collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation));
+			}
+		}
+
+			
+
+		
+		
 
 #if 0
 		system("cls");
