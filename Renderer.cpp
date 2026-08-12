@@ -137,7 +137,7 @@ bool Renderer::DrawCollectible(int InX, int InY, std::vector<std::shared_ptr<Col
 			LOG(InCollectibles[i]->GetIcon());
 			return true;
 		}
-		return false;
 
 	}
+	return false;
 }
