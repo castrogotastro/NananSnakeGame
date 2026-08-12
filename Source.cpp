@@ -6,6 +6,7 @@
 #include <memory>
 #include "Renderer.h"
 #include "Collectible.h"
+#include "RandomNumGenerator.h"
 
 int main()
 {
@@ -16,13 +17,17 @@ int main()
 
 	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *gameBoard);
 
-	int numCollectiblesToStart = 1;
+	int numCollectiblesToStart = 4;
 
 	std::vector <std::shared_ptr<Collectible>> collectiblesOnBoard;
 
 	for (int i = 0; i < numCollectiblesToStart; i++)
 	{
-		collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(FVector2(2, 2), '@'));
+		FVector2 collectibleLocation;
+		collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
+		collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
+
+		collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation, '@'));
 	}
 
 	Renderer renderer(player, gameBoard);
