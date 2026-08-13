@@ -8,6 +8,7 @@
 #include "Collectible.h"
 #include "RandomNumGenerator.h"
 #include "Level.h"
+#include "GameMode.h"
 
 //Master Level
 	//container of levels
@@ -17,12 +18,25 @@
 
 
 //GameMode - Rules of the game
+	//number of players allow.
+	// single player. Death match 
 	//Win state
+		//winning the level 
+		//winning the game
 	//lose state
 
+//PlayerState - what holds data for player (things like score)
+
+//open game - Create core class (GameMode, masterlevel, playerState
+
+//menu
+
+//Start level - Gameboard, Score, Snake
 
 int main()
 {
+	
+	GameMode* gameMode = GameMode::GetInstace();
 	Level* masterLevel = Level::GetInstance();
 
 	masterLevel->AddLevelGameboard(1, 20, 25, 5);
