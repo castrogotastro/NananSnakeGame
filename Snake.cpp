@@ -1,5 +1,6 @@
 #include "Snake.h"
 #include "GameBoard.h"
+#include "GameMode.h"
 
 Snake::Snake(FVector2 InLocation, char InIconHead, char InIconTail, const GameBoard& InGameboard)
 	: AActor(InLocation, InIconHead), mTailIcon(InIconTail)
@@ -60,6 +61,19 @@ void Snake::MoveTail(FVector2& InOldHeadLocation)
 		nextLocation = previousLocation;
 	}
 }
+
+void Snake::Move(int InChangeX, int InChangeY)
+{
+	AActor::Move(InChangeX, InChangeY);
+
+	GameMode* gameMode = GameMode::GetInstace();
+	if (gameMode)
+	{
+		gameMode->UpdateLooseState();
+	}
+}
+
+
 
 
 

@@ -22,5 +22,8 @@ public:
 	int GetTailLength();
 
 	void MoveTail(FVector2& InOldHeadLocation);
+
+	virtual void Move(int InChangeX, int InChangeY) override;
+
 };
 
