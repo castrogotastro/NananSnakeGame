@@ -133,6 +133,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="RandomNumGenerator.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Snake.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InputState.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="RandomNumGenerator.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Snake.h" />
