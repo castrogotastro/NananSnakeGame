@@ -14,6 +14,6 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	char GetWallIcon() const;
-	char GetScoreToWinLevel() const;
+	int GetScoreToWinLevel() const;
 };
 
