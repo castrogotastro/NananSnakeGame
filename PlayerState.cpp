@@ -1,4 +1,5 @@
 #include "PlayerState.h"
+#include "GameMode.h"
 
 int PlayerState::GetScore()
 {
@@ -20,10 +21,19 @@ void PlayerState::ResetScoreToMin()
 
 void PlayerState::ChangeScore(int InScoreChangeAmount)
 {
+    GameMode* gamemode = GameMode::GetInstace();
+
+    if (gamemode == nullptr)
+    {
+        return;
+    }
+
     mScore += InScoreChangeAmount;
 
     if (mScore < mMinimumScore)
     {
         mScore = mMinimumScore;
     }
+
+    gamemode->UpdateWinState();
 }
