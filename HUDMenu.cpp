@@ -5,6 +5,11 @@ HUDMenu::HUDMenu(std::string InMenuTitle)
 {
 }
 
+HUDMenu::HUDMenu(std::string InMenuTitle, std::vector<MessageInputData>& InMessagesInputs)
+	: mMessagesInputs(InMessagesInputs)
+{
+}
+
 void HUDMenu::RenderHUD()
 {
 	LOG_LN("===============================");

@@ -21,6 +21,7 @@ class HUDMenu : public HUD
 {
 public:
 	HUDMenu(std::string InMenuTitle);
+	HUDMenu(std::string InMenuTitle, std::vector<MessageInputData>& InMessagesInputs);
 
 
 	//Properties
