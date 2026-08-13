@@ -10,6 +10,8 @@
 #include "Level.h"
 #include "GameMode.h"
 #include "PlayerState.h"
+#include "HUDGameplay.h"
+
 
 //Master Level
 	//container of levels
@@ -30,9 +32,18 @@
 
 //open game - Create core class (GameMode, masterlevel, playerState
 
-//menu
+//menu (pause and wait for input)
+	//start the game
+	//exit
 
 //Start level - Gameboard, Score, Snake
+
+	//HUD render Score
+
+//Restart menu (pause and wait for input)
+	//Press 'r' to Restart the game
+	//Press 's' to Start from beginning the game or return to main menu
+	//exit
 
 int main()
 {
@@ -60,7 +71,7 @@ int main()
 
 
 
-
+	HUDGameplay hudGameplay(playerState);
 
 	int numCollectiblesToStart = 4;
 
@@ -96,7 +107,7 @@ int main()
 		inputManager.MoveCharacterSingleSpace(*player);
 
 		renderer.RenderGame(collectiblesOnBoard);
-
+		hudGameplay.RenderHUD();
 
 		//check if player is overlapping with collectible
 		for (const std::shared_ptr<Collectible>& collectible : collectiblesOnBoard)
@@ -104,6 +115,7 @@ int main()
 			if (player->GetLocation() == collectible->GetLocation())
 			{
 				collectible->SetHasBeenCollected(true);
+				playerState->ChangeScore(1);
 			}
 		}
 
