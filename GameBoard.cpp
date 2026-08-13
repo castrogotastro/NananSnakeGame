@@ -20,7 +20,7 @@ char GameBoard::GetWallIcon() const
 	return mIconWall;
 }
 
-char GameBoard::GetScoreToWinLevel() const
+int GameBoard::GetScoreToWinLevel() const
 {
 	return mScoreToWinLevel;
 }

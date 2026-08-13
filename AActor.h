@@ -20,7 +20,7 @@ public:
 
 	char GetIcon() const;
 
-	void Move(int InChangeX, int InChangeY);
+	virtual void Move(int InChangeX, int InChangeY);
 	
 };
 

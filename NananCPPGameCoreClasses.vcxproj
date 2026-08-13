@@ -129,6 +129,7 @@
     <ClCompile Include="Collectible.cpp" />
     <ClCompile Include="FVector2.cpp" />
     <ClCompile Include="GameBoard.cpp" />
+    <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Collectible.h" />
     <ClInclude Include="FVector2.h" />
     <ClInclude Include="GameBoard.h" />
+    <ClInclude Include="GameMode.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InputState.h" />
     <ClInclude Include="Level.h" />
