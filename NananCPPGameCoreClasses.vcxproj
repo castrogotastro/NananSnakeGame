@@ -132,6 +132,7 @@
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="HUDGameplay.cpp" />
+    <ClCompile Include="HUDMenu.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="HUDGameplay.h" />
+    <ClInclude Include="HUDMenu.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InputState.h" />
     <ClInclude Include="Level.h" />
