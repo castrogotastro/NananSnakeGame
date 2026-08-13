@@ -9,6 +9,7 @@
 #include "RandomNumGenerator.h"
 #include "Level.h"
 #include "GameMode.h"
+#include "PlayerState.h"
 
 //Master Level
 	//container of levels
@@ -37,6 +38,9 @@ int main()
 {
 	
 	GameMode* gameMode = GameMode::GetInstace();
+
+
+	std::shared_ptr<PlayerState> playerState = std::make_shared<PlayerState>();
 	Level* masterLevel = Level::GetInstance();
 
 	masterLevel->AddLevelGameboard(1, 20, 25, 5);
@@ -51,6 +55,12 @@ int main()
 	std::shared_ptr<GameBoard> gameBoard = std::make_shared<GameBoard>(30,20, 5);
 
 	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *gameBoard);
+
+	gameMode->InitializeTrackingProperties(player, currentGameboard, playerState);
+
+
+
+
 
 	int numCollectiblesToStart = 4;
 
@@ -73,6 +83,8 @@ int main()
 	FVector2 winCondition(5, gameBoard->GetHeight());
 
 	bool isEasyMode = true;
+
+
 
 	do
 	{
