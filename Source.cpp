@@ -7,13 +7,34 @@
 #include "Renderer.h"
 #include "Collectible.h"
 #include "RandomNumGenerator.h"
+#include "Level.h"
+
+//Master Level
+	//container of levels
+
+	//video 3 - SpawningActor
+	//container of Actors in level
+
+
+//GameMode - Rules of the game
+	//Win state
+	//lose state
+
 
 int main()
 {
-	int testPush = 1;
+	Level* masterLevel = Level::GetInstance();
+
+	masterLevel->AddLevelGameboard(1, 20, 25, 5);
+	masterLevel->AddLevelGameboard(2, 2, 6, 2);
+	masterLevel->AddLevelGameboard(3, 100, 60, 4);
+
+	std::shared_ptr<GameBoard> currentGameboard = masterLevel->GetCurrentLevelGameBoard();
+
 	bool isGameOver = false;
 	InputManager inputManager;
-	std::shared_ptr<GameBoard> gameBoard = std::make_shared<GameBoard>(30,20);
+	
+	std::shared_ptr<GameBoard> gameBoard = std::make_shared<GameBoard>(30,20, 5);
 
 	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *gameBoard);
 
