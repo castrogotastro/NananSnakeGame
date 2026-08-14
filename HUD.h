@@ -4,7 +4,7 @@
 
 class HUD
 {
-public:
+protected:
 	virtual void RenderHUD() = 0;
 };
 
