@@ -1,7 +1,7 @@
 #include "GameBoard.h"
 
-GameBoard::GameBoard(int InWidth, int InHeight, int InScoreToWinLevel)
-	:mWidth(InWidth), mHeight(InHeight), mScoreToWinLevel(InScoreToWinLevel)
+GameBoard::GameBoard(int InWidth, int InHeight, int InScoreToWinLevel, int InCollectiblesToStartLevel)
+	:mWidth(InWidth), mHeight(InHeight), mScoreToWinLevel(InScoreToWinLevel), mCollectiblesToStartLevel(InCollectiblesToStartLevel)
 {
 }
 
@@ -23,4 +23,9 @@ char GameBoard::GetWallIcon() const
 int GameBoard::GetScoreToWinLevel() const
 {
 	return mScoreToWinLevel;
+}
+
+int GameBoard::GetCollectiblesToStartLevel() const
+{
+	return mCollectiblesToStartLevel;
 }
