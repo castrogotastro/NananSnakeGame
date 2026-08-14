@@ -7,6 +7,7 @@
 
 class HUDGameplay;
 class PlayerState;
+class GameMode;
 
 class MasterHUD
 {
@@ -30,6 +31,16 @@ public:
 		MessageInputData("Press e to exit", 'e')
 	});
 
+	std::shared_ptr<HUDMenu> mWinMenu = std::make_shared<HUDMenu>(
+		"SNAKE - Win Menu",
+		std::vector<MessageInputData>
+	{
+		MessageInputData("Press p to play agin level", 'p'),
+		MessageInputData("Press e to exit", 'e')
+	});
+
+
+
 	std::shared_ptr<HUDGameplay> mGameplay;
 
 	std::shared_ptr<HUDMessageExit> mExitMenu = std::make_shared<HUDMessageExit>(
@@ -41,7 +52,15 @@ public:
 	});
 
 
+	std::shared_ptr<HUDMessageNextLevel> mNextLevelMenu = std::make_shared<HUDMessageNextLevel>("Next Level Menu");
 
+public:
+	void LoadMainMenu(GameMode* InGameMode);
+	void LoadNextLevelMenu(GameMode* InGameMode);
+	void LoadWinMenu(GameMode* InGameMode);
+	void LoadExitMenu(GameMode* InGameMode);
+	void LoadRestartMenu(GameMode* InGameMode);
+	void RenderGameplayHUD();
 	
 	
 	
