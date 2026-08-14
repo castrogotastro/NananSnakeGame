@@ -48,6 +48,16 @@ bool GameMode::GetLossState()
 	return mHasPlayerLost;
 }
 
+Difficultly GameMode::GetDiffucty() const
+{
+	return mDifficulty;
+}
+
+void GameMode::SetDiffucty(Difficultly InDifficulty)
+{
+	mDifficulty = InDifficulty;
+}
+
 void GameMode::ResetStates()
 {
 	mHasPlayerLost = false;
