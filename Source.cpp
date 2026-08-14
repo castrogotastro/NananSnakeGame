@@ -10,6 +10,7 @@
 #include "Level.h"
 #include "GameMode.h"
 #include "PlayerState.h"
+#include "MasterHUD.h"
 
 //Master Level
 	//container of levels
@@ -30,196 +31,254 @@
 
 //open game - Create core class (GameMode, masterlevel, playerState
 
-//menu
+//menu (pause and wait for input)
+	//start the game
+	//exit
 
 //Start level - Gameboard, Score, Snake
 
-int main()
+	//HUD render Score
+
+//Restart menu (pause and wait for input)
+	//Press 'r' to Restart the game
+	//Press 's' to Start from beginning the game or return to main menu
+	//exit
+
+
+std::vector<std::shared_ptr<Collectible>> SpawnInitialCollectibles(GameMode* InGame, Level* InLevel)
 {
-	
-	GameMode* gameMode = GameMode::GetInstace();
-
-
-	std::shared_ptr<PlayerState> playerState = std::make_shared<PlayerState>();
-	Level* masterLevel = Level::GetInstance();
-
-	masterLevel->AddLevelGameboard(1, 20, 25, 5);
-	masterLevel->AddLevelGameboard(2, 2, 6, 2);
-	masterLevel->AddLevelGameboard(3, 100, 60, 4);
-
-	std::shared_ptr<GameBoard> currentGameboard = masterLevel->GetCurrentLevelGameBoard();
-
-	bool isGameOver = false;
-	InputManager inputManager;
-	
-	std::shared_ptr<GameBoard> gameBoard = std::make_shared<GameBoard>(30,20, 5);
-
-	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *gameBoard);
-
-	gameMode->InitializeTrackingProperties(player, currentGameboard, playerState);
-
-
-
-
-
-	int numCollectiblesToStart = 4;
-
 	std::vector <std::shared_ptr<Collectible>> collectiblesOnBoard;
-
-	for (int i = 0; i < numCollectiblesToStart; i++)
+	for (int i = 0; i < InLevel->GetCurrentLevelGameBoard()->GetCollectiblesToStartLevel(); i++)
 	{
 		FVector2 collectibleLocation;
-		collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
-		collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
+		collectibleLocation.mX = GenerateRandomValueInWidth(InLevel->GetCurrentLevelGameBoard()->GetWidth());
+		collectibleLocation.mY = GenerateRandomValueInHeight(InLevel->GetCurrentLevelGameBoard()->GetHeight());
 
 		collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation, '@'));
 	}
 
-	Renderer renderer(player, gameBoard);
+	return collectiblesOnBoard;
+}
+
+
+void StartGame(Level* InLevel, GameMode* InGamemode, std::shared_ptr<PlayerState> InPlayerState, std::shared_ptr<MasterHUD> InMasterHUD)
+{
+	if (InLevel == nullptr)
+	{
+		InLevel = Level::GetInstance();
+	}
+	if (InGamemode == nullptr)
+	{
+		return;
+		/*InGamemode = GameMode::GetInstance();*/
+	}
+
+	InGamemode->SetGameMatchState(GameMatchStates::MatchStart);
+	//Get current level gameboard
+	std::shared_ptr<GameBoard> currentGameboard = InLevel->GetCurrentLevelGameBoard();
+
+	//Create InputManager and player
+	InputManager inputManager;
+	std::shared_ptr<Snake> player = std::make_shared<Snake>(FVector2(5, 22), 'P', '*', *currentGameboard);
+
+
+	//Pass pointers to gamemode
+	InGamemode->InitializeTrackingProperties(player, currentGameboard, InPlayerState);
+
+
+	std::vector <std::shared_ptr<Collectible>> collectiblesOnBoard = SpawnInitialCollectibles(InGamemode, InLevel);
+
 	
+
+	Renderer renderer(player, currentGameboard);
+
 	LOG_LN("Start Game");
 
 	bool isGameWon = false;
-	FVector2 winCondition(5, gameBoard->GetHeight());
+	FVector2 winCondition(5, currentGameboard->GetHeight());
 
-	bool isEasyMode = true;
+	
 
-
-
-	do
+	while (InGamemode->GetGameMatchState() == GameMatchStates::MatchStart)
 	{
-		if (!player || !gameBoard)
+		while (InGamemode->GetLossState() == false && InGamemode->GetWinState() == false)
 		{
-			return 1;
-		}
-		inputManager.Update();
-		inputManager.MoveCharacterSingleSpace(*player);
-
-		renderer.RenderGame(collectiblesOnBoard);
-
-
-		//check if player is overlapping with collectible
-		for (const std::shared_ptr<Collectible>& collectible : collectiblesOnBoard)
-		{
-			if (player->GetLocation() == collectible->GetLocation())
+			if (!player || !currentGameboard)
 			{
-				collectible->SetHasBeenCollected(true);
+				return;
+			}
+			//Take input and move change player position
+			inputManager.Update();
+			inputManager.MoveCharacterContinuous(*player);
+
+			//Render
+			renderer.RenderGame(collectiblesOnBoard);
+			InMasterHUD->RenderGameplayHUD();
+
+			//check if player is overlapping with collectible
+			for (const std::shared_ptr<Collectible>& collectible : collectiblesOnBoard)
+			{
+				if (player->GetLocation() == collectible->GetLocation())
+				{
+					collectible->SetHasBeenCollected(true);
+					InPlayerState->ChangeScore(1);
+					player->AddToTail();
+				}
+			}
+
+			
+			//Remove collected/overlapped collectible from containter of collectibles (collectiblesOnBoard)
+			for (std::vector<std::shared_ptr<Collectible>>::iterator iterator = collectiblesOnBoard.begin();
+				iterator != collectiblesOnBoard.end(); )
+			{
+				if ((*iterator)->GetHasBeenCollected() == true)
+				{
+					(*iterator).reset();
+
+					FVector2 collectibleLocation;
+					collectibleLocation.mX = GenerateRandomValueInWidth(currentGameboard->GetWidth());
+					collectibleLocation.mY = GenerateRandomValueInHeight(currentGameboard->GetHeight());
+
+					(*iterator) = std::make_shared<Collectible>(collectibleLocation);
+				}
+				else
+				{
+					++iterator;
+				}
+			}
+
+			//Add collectibles to board. Quantity based on difficulty
+			if (InGamemode->GetDiffucty() == Difficultly::Easy)
+			{
+
+				for (int numCollectibles = collectiblesOnBoard.size(); numCollectibles < player->GetTailLength(); ++numCollectibles)
+				{
+					FVector2 collectibleLocation;
+					collectibleLocation.mX = GenerateRandomValueInWidth(currentGameboard->GetWidth());
+					collectibleLocation.mY = GenerateRandomValueInHeight(currentGameboard->GetHeight());
+
+					collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation));
+				}
+			}
+
+			if (InGamemode->GetDiffucty() == Difficultly::Hard)
+			{
+
+				for (int numCollectibles = collectiblesOnBoard.size(); numCollectibles < (player->GetTailLength() / 2); ++numCollectibles)
+				{
+					FVector2 collectibleLocation;
+					collectibleLocation.mX = GenerateRandomValueInWidth(currentGameboard->GetWidth());
+					collectibleLocation.mY = GenerateRandomValueInHeight(currentGameboard->GetHeight());
+
+					collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation));
+				}
 			}
 		}
 
-		bool isOverlap = false;
-		for (std::vector<std::shared_ptr<Collectible>>::iterator iterator = collectiblesOnBoard.begin(); 
-			iterator != collectiblesOnBoard.end(); )
+		if (InGamemode->GetLossState() == true)
 		{
-			if ((*iterator)->GetHasBeenCollected() == true)
+			InGamemode->SetGameMatchState(GameMatchStates::MenuRestart);
+		}
+		if (InGamemode->GetWinState() == true)
+		{
+			if (InLevel->SetLevelToNext() == true)
 			{
-				(*iterator).reset();
-
-				FVector2 collectibleLocation;
-				collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
-				collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
-				
-				(*iterator) = std::make_shared<Collectible>(collectibleLocation);
-				player->AddToTail();
-
-				
+				InGamemode->SetGameMatchState(GameMatchStates::MenuNextLevel);
 			}
 			else
 			{
-				++iterator;
+				InGamemode->SetGameMatchState(GameMatchStates::MenuWin);
 			}
 		}
-
-		if (isEasyMode == true)
-		{
-
-			for (int numCollectibles = collectiblesOnBoard.size(); numCollectibles < player->GetTailLength(); ++numCollectibles)
-			{
-				FVector2 collectibleLocation;
-				collectibleLocation.mX = GenerateRandomValueInWidth(gameBoard->GetWidth());
-				collectibleLocation.mY = GenerateRandomValueInHeight(gameBoard->GetHeight());
-
-				collectiblesOnBoard.emplace_back(std::make_shared<Collectible>(collectibleLocation));
-			}
-		}
-
-			
-
-		
-		
-
-#if 0
-		system("cls");
-
-		for (int y = 0; y <= gameBoard->GetHeight(); ++y)
-		{
-			for (int x = 0; x <= gameBoard->GetWidth(); ++x)
-			{
-				if (x == 0 || x == gameBoard->GetWidth() || y == 0 || y == gameBoard->GetHeight())
-				{
-					//Rendering Boarder
-					if (x == winCondition.mX && y == winCondition.mY)
-					{
-						LOG(" ");
-					}
-					else
-					{
-						LOG(gameBoard->GetWallIcon());
-					}
-
-					if (x == gameBoard->GetWidth())
-					{
-						std::cout << std::endl;
-					}
-
-				}
-				//Rendering player
-				else if (x == player->GetLocation().mX && y == player->GetLocation().mY)
-				{
-					LOG(player->GetIcon());
-				}
-
-				//Render empty
-				else
-				{
-					LOG(" ");
-				}
-				
-				//Loose condition
-				if ((player->GetLocation().mX == 0
-					|| player->GetLocation().mX == gameBoard->GetWidth()
-					|| player->GetLocation().mY == 0
-					|| player->GetLocation().mY == gameBoard->GetHeight()) 
-					&& player->GetLocation().mX != winCondition.mX
-					&& player->GetLocation().mY != winCondition.mY)
-				{
-					isGameOver = true;
-				}
-
-				//win condition
-				if (player->GetLocation().mX == winCondition.mX
-					&& player->GetLocation().mY == winCondition.mY)
-				{
-					isGameWon = true;
-				}
-
-			}
-		}
-#endif
-
-	} while (isGameOver == false && isGameWon == false);
-
-	if (isGameOver == true)
-	{
-		LOG("Game Over");
-		LOG("Game Over");
-		LOG("Game Over");
 	}
-	if (isGameWon == true)
-	{
-		LOG("You won!!!");
-		LOG("You won!!!");
-		LOG("You won!!!");
-	}
+
+
 	
+		
+
+	
+
+}
+
+
+int main()
+{
+	//Create Core Class
+	GameMode* gameMode = GameMode::GetInstace();
+	std::shared_ptr<PlayerState> playerState = std::make_shared<PlayerState>();
+	Level* masterLevel = Level::GetInstance();
+
+	//Create Gameboards (individual levels)
+	masterLevel->AddLevelGameboard(1, 20, 25, 2, 3);
+	masterLevel->AddLevelGameboard(2, 10, 20, 2, 5);
+	masterLevel->AddLevelGameboard(3, 15, 15, 2, 7);
+
+
+	//Create HUD
+	std::shared_ptr<MasterHUD> masterHud = std::make_shared<MasterHUD>(playerState);
+
+	//Set default starting values
+	gameMode->SetGameMatchState(GameMatchStates::MenuMain);
+	gameMode->SetDiffucty(Difficultly::Easy);
+	bool shouldPlayFromStart = true;
+
+	if (gameMode)
+	{
+		while (gameMode->GetGameMatchState() != GameMatchStates::MatchEnd)
+		{
+			switch (gameMode->GetGameMatchState())
+			{
+				case GameMatchStates::MenuMain:
+				{
+					masterHud->LoadMainMenu(gameMode);
+					shouldPlayFromStart = true;
+					break;
+				}
+				case GameMatchStates::BeginMatch:
+				{
+					if (shouldPlayFromStart == true)
+					{
+						masterLevel->SetCurrentGameboardLevel(1);
+					}
+					shouldPlayFromStart = false;
+					gameMode->ResetStates();
+					playerState->SetScore(0);
+					StartGame(masterLevel, gameMode, playerState, masterHud);
+					break;
+				}
+				case GameMatchStates::MenuNextLevel:
+				{
+					masterHud->LoadNextLevelMenu(gameMode);
+					break;
+				}
+				case GameMatchStates::MenuRestart:
+				{
+					masterHud->LoadRestartMenu(gameMode);
+					break;
+				}
+				case GameMatchStates::RestartMatch:
+				{
+					gameMode->ResetStates();
+					playerState->SetScore(0);
+					StartGame(masterLevel, gameMode, playerState, masterHud);
+					break;
+				}
+				case GameMatchStates::MenuWin:
+				{
+					masterHud->LoadWinMenu(gameMode);
+					shouldPlayFromStart = true;
+					break;
+				}
+				case GameMatchStates::MenuGameOver:
+				{
+					masterHud->LoadExitMenu(gameMode);
+					break;
+				}
+
+				default:
+					break;
+			}
+		}
+	}
+
 }

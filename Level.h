@@ -37,12 +37,13 @@ private:
 	int mDefaultLevelWidth = 40;
 	int mDefaultLevelHeight = 15;
 	int mDefaultLevelWinScore = 3;
+	int mDefaultLevelInitlialCollectibles = 3;
 	int mCurrentLevel = 1;
 
 	std::map<int, std::shared_ptr<GameBoard>> mLevelGameboards;
 
 public:
-	void AddLevelGameboard(int InLevelKey, int InWidth, int InHeight, int InScoreToWin);
+	void AddLevelGameboard(int InLevelKey, int InWidth, int InHeight, int InScoreToWin, int InCollectiblesToStartLevel);
 
 	std::shared_ptr<GameBoard> GetCurrentLevelGameBoard();
 

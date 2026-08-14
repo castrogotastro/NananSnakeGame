@@ -17,12 +17,12 @@ Level* Level::GetInstance()
 	return sInstance;
 }
 
-void Level::AddLevelGameboard(int InLevelKey, int InWidth, int InHeight, int InScoreToWin)
+void Level::AddLevelGameboard(int InLevelKey, int InWidth, int InHeight, int InScoreToWin, int InCollectiblesToStartLevel)
 {
 	if (mLevelGameboards.contains(InLevelKey) == false)
 	{
 		//						key				value
-		mLevelGameboards.emplace(InLevelKey, std::make_shared<GameBoard>(InWidth, InHeight, InScoreToWin));
+		mLevelGameboards.emplace(InLevelKey, std::make_shared<GameBoard>(InWidth, InHeight, InScoreToWin, InCollectiblesToStartLevel));
 	}
 	
 }
@@ -34,7 +34,7 @@ std::shared_ptr<GameBoard> Level::GetCurrentLevelGameBoard()
 		return mLevelGameboards[mCurrentLevel];
 	}
 
-	mLevelGameboards.emplace(mCurrentLevel, std::make_shared<GameBoard>(mDefaultLevelWidth, mDefaultLevelHeight, mDefaultLevelWinScore));
+	mLevelGameboards.emplace(mCurrentLevel, std::make_shared<GameBoard>(mDefaultLevelWidth, mDefaultLevelHeight, mDefaultLevelWinScore, mDefaultLevelInitlialCollectibles));
 
 	return mLevelGameboards.at(mCurrentLevel);
 

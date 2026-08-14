@@ -34,6 +34,12 @@ enum class GameMatchStates
 	MenuGameOver,
 };
 
+enum class Difficultly
+{
+	Easy,
+	Hard
+};
+
 class GameMode
 {
 	//properties - Singleton
@@ -45,6 +51,7 @@ class GameMode
 	std::weak_ptr<PlayerState> mPlayerStateWeak;
 	bool mHasPlayerWon = false;
 	bool mHasPlayerLost = false;
+	Difficultly mDifficulty = Difficultly::Hard;
 
 	//Properties for tracking game match state (where player is in game)
 	GameMatchStates mGameMatchState = GameMatchStates::MenuMain;
@@ -70,6 +77,11 @@ public:
 
 	bool GetWinState();
 	bool GetLossState();
+
+	Difficultly GetDiffucty() const;
+	void SetDiffucty(Difficultly InDifficulty);
+
+	//Reset
 	void ResetStates();
 
 	//Update Win and Loose states 
