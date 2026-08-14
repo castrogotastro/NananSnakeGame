@@ -20,8 +20,8 @@ struct MessageInputData
 class HUDMenu : public HUD
 {
 public:
-	HUDMenu(std::string InMenuTitle);
-	HUDMenu(std::string InMenuTitle, std::vector<MessageInputData>& InMessagesInputs);
+	explicit HUDMenu(std::string InMenuTitle);
+	HUDMenu(std::string InMenuTitle, std::vector<MessageInputData> InMessagesInputs);
 
 
 	//Properties
@@ -36,7 +36,7 @@ public:
 
 	void AddMessageInput(MessageInputData InMessageInputData);
 
-private:
+protected:
 	// Inherited via HUD
 	void RenderHUD() override;
 };
