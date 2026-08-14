@@ -19,6 +19,7 @@ struct MessageInputData
 
 class HUDMenu : public HUD
 {
+	friend class MasterHUD;
 public:
 	explicit HUDMenu(std::string InMenuTitle);
 	HUDMenu(std::string InMenuTitle, std::vector<MessageInputData> InMessagesInputs);
@@ -29,7 +30,7 @@ private:
 	std::vector<MessageInputData> mMessagesInputs;
 	std::string mMenuTitle;
 
-public:
+protected:
 	char GetUserInput();
 
 	bool IsInputValid(char InUserInput);
